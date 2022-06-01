@@ -23,4 +23,22 @@ RSpec.describe LoansController, type: :controller do
       end
     end
   end
+
+  describe '#payments' do
+    let(:loan) { Loan.create!(funded_amount: 100.0) }
+    let(:payment) { Payment.create!(amount: 20.0, date: Date.today) }
+
+    it 'responds with a 200' do
+      get :payments, params: { id: loan.id }
+      expect(response).to have_http_status(:ok)
+    end
+
+    context 'if the loan is not found' do
+      it 'responds with a 404' do
+        get :show, params: { id: 10000 }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
 end
